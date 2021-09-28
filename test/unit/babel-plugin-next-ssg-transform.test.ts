@@ -536,5 +536,19 @@ describe('babel plugin (next-ssg-transform)', () => {
         `You can not use getStaticProps or getStaticPaths with getServerSideProps. To use SSG, please remove getServerSideProps`
       )
     })
+
+    it('supports getStaticLayoutProps', () => {
+      const output = babel(trim`
+          export function getStaticLayoutProps() {}
+
+          export default function MyLayout({ children }) {
+            return <div>{children}</div>;
+          }
+        `)
+
+      expect(output).toMatchInlineSnapshot(
+        `"export var __N_SSG=true;export default function MyLayout({children}){return __jsx(\\"div\\",null,children);}"`
+      )
+    })
   })
 })
